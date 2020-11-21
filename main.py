@@ -1,16 +1,29 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+import argparse
+from gematria import GematriaDecoder
+from isopsephy import IsopsephyDecoder
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+def gematria(word) -> int:
+    return GematriaDecoder.decode_word(word)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+def isopsephy(word) -> int:
+    return IsopsephyDecoder.decode_word(word)
+
+
+parser = argparse.ArgumentParser(description="Calculate gematria or isopsephia")
+parser.add_argument("text", metavar="TEXT", type=str, nargs=1,
+                    help="a text which gematria or isopsephia will be calculated")
+parser.add_argument("-m", dest="method",
+                    choices=["gematria", "isopsephy"],
+                    help="method for calculating value", required=True)
+parser.add_argument("--gui", dest="gui", action="store_true")
+
+
+args = parser.parse_args()
+method = args.method
+
+if method == "gematria":
+    print(gematria(args.text[0]))
+elif method == "isopsephy":
+    print(isopsephy(args.text[0]))
