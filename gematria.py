@@ -36,5 +36,13 @@ class GematriaDecoder:
     @staticmethod
     def decode_word(word: str) -> int:
         last_idx = len(word) - 1
-        return sum([FINAL_ENCODING[ch] if (ch in FINAL_ENCODING and idx == last_idx) else STANDARD_ENCODING[ch]
-                    for idx, ch in enumerate(word)])
+        result = 0
+        for idx, element in enumerate(word):
+            if idx == last_idx:
+                result += FINAL_ENCODING[element] if element in FINAL_ENCODING else STANDARD_ENCODING[element]
+            else:
+                if element in STANDARD_ENCODING:
+                    result += STANDARD_ENCODING[element]
+                else:
+                    raise RuntimeError("Invalid letter: {}".format(element))
+        return result

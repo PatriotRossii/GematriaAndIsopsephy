@@ -4,7 +4,7 @@ STANDARD_ENCODING = {
     "γ": 3,
     "δ": 4,
     "ε": 5,
-    "ϛ": 6,
+    "ϝ": 6,
     "ζ": 7,
     "η": 8,
     "θ": 9,
@@ -29,37 +29,37 @@ STANDARD_ENCODING = {
 }
 
 ALIASES = {
-    "α": {"Α"},
-    "β": {"Β"},
-    "γ": {"Γ"},
-    "δ": {"Δ"},
-    "ε": {"Ε"},
-    "ϛ": {"Ϝ", "ϝ", "Ϛ"},
-    "ζ": {"Ϛ"},
-    "η": {"Η"},
-    "θ": {"Θ"},
-    "ι": {"Ι"},
-    "κ": {"Κ"},
-    "λ": {"Λ"},
-    "μ": {"Μ"},
-    "ν": {"Ν"},
-    "ξ": {"Ξ"},
-    "ο": {"Ο"},
-    "π": {"Π"},
-    "ϙ": {"Ϙ"},
-    "ρ": {"Ρ"},
-    "σ": {"Σ"},
-    "τ": {"Τ"},
-    "υ": {"Υ"},
-    "φ": {"Φ"},
-    "χ": {"Χ"},
-    "ψ": {"Ψ"},
-    "ω": {"Ω"},
-    "ϡ": {"Ϡ"}
+    "α": ("Α"),
+    "β": ("Β"),
+    "γ": ("Γ"),
+    "δ": ("Δ"),
+    "ε": ("Ε"),
+    "ϝ": ("Ϝ"),
+    "ζ": ("Ϛ"),
+    "η": ("Η"),
+    "θ": ("Θ"),
+    "ι": ("Ι"),
+    "κ": ("Κ"),
+    "λ": ("Λ"),
+    "μ": ("Μ"),
+    "ν": ("Ν"),
+    "ξ": ("Ξ"),
+    "ο": ("Ο"),
+    "π": ("Π"),
+    "ϙ": ("Ϙ"),
+    "ρ": ("Ρ"),
+    "σ": ("Σ", "ς"),
+    "τ": ("Τ"),
+    "υ": ("Υ"),
+    "φ": ("Φ"),
+    "χ": ("Χ"),
+    "ψ": ("Ψ"),
+    "ω": ("Ω"),
+    "ϡ": ("Ϡ"),
 }
 
 
-def is_synonym(self, letter) -> str:
+def is_synonym(letter) -> str:
     for alias in ALIASES:
         if letter in ALIASES[alias]:
             return alias
@@ -69,4 +69,9 @@ def is_synonym(self, letter) -> str:
 class IsopsephyDecoder:
     @staticmethod
     def decode_word(word):
-        return sum([STANDARD_ENCODING.get(e, STANDARD_ENCODING.get(ALIASES.get(is_synonym(e), 0), 0)) for e in word])
+        result = 0
+        for element in word:
+            element = element if element in STANDARD_ENCODING else is_synonym(element)
+            if element:
+                result += STANDARD_ENCODING[element]
+        return result
